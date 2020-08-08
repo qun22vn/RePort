@@ -1,0 +1,53 @@
+﻿@model Task_Report.tb_report
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Assets/Boostrap/css/bootstrap.css" rel="stylesheet" />
+<link href="~/Assets/css/Show.css" rel="stylesheet" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<div class="main">
+    @*---------------------------- MAIN START----------------------------*@
+    <div class="row title">
+        <div class="col-sm">
+            <h5>Tên Đại lý: <span>@Html.DisplayFor(model => model.UserName)</span></h5>
+        </div>
+    </div>
+    <div class="row input">
+        @*@Html.DisplayFor(model => model.RequireImg)*@
+        <img src="~/RequireImg/image_2020-08-07_10-45-39.png" />
+    </div>
+    <div class="row title">
+        <div class="col-sm">
+            <h5>Kết luận: <span>@Html.DisplayFor(model => model.Conclution) </span></h5>
+        </div>
+    </div>
+    <div class="row input" id="dialog">
+        @*@Html.DisplayFor(model => model.ConclutionImg)*@
+        <img src="~/ConclutionImg/photo_2020-08-07_10-41-44.jpg" />
+    </div>
+    <div class="row input">
+        @*@Html.DisplayFor(model => model.ConclutionImg)*@
+        <img src="~/ConclutionImg/photo_2020-08-07_10-41-58.jpg" />
+    </div>
+    @*---------------------------- MAIN END----------------------------
+     ---------------------------- FOOTER START----------------------------*@
+    <div class="row footer">
+        <div class="col-md-offset-2 col-md-12">
+            <button type="button" class="btn btn-success">
+                @Html.ActionLink("Sửa", "Edit", new { id = Model.id }, new { @class = "my-class" })
+            </button>
+            <button type="button" class="btn btn-primary">
+                @Html.ActionLink("Trở lại", "Index", null, new { @class = "my-class" })
+            </button>
+        </div>
+    </div>
+    @*---------------------------- FOOTER END----------------------------*@
+</div>
+    @*--------------------------------javascript------------------------------*@
+<script>
+    
+</script>

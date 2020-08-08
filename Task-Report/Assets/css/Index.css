@@ -1,0 +1,72 @@
+
+.table {
+    margin-top: 20px;
+}
+    .table thead th {
+        vertical-align: middle;
+    }
+    .table td {
+        vertical-align: middle;
+    }
+
+.color-table {
+    background-color: #ade498;
+}
+.header .nametable {
+    text-align: center;
+    font-weight: bold;
+    font-size: 50px;
+    line-height: 40px;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 70px 10px 50px;
+    color: lightseagreen;
+}
+.row{
+    display:block;
+    margin:auto;
+}
+.btn {
+/*height: 30px;*/
+border-radius: 5px;
+margin: 0px 10px;
+padding: 3px 5px;
+margin: 5px;
+border: none;
+float:right;
+}
+.btn-color {
+    background-color: white;
+}
+.box {
+    width: 1000px;
+}
+
+    .box .box1 {
+        text-align:center;
+    }
+
+    .box .box2 {
+        text-align: center;
+    }
+
+.pull-center {
+    text-align: center;
+}
+.pull-right{
+    float:right;
+}
+
+.text-color {
+    color: white;
+}
+
+.btn-lg {
+    border: none
+}
+a.my-class {
+    color: black;
+    text-decoration:none;
+}
+.pagination {
+    float:right;
+}
