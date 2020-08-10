@@ -1,0 +1,50 @@
+﻿@model Task_Report.tb_report
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link href="~/Assets/Boostrap/css/bootstrap.css" rel="stylesheet" />
+<link href="~/Assets/css/Show.css" rel="stylesheet" />
+
+<div class="main">
+    @*---------------------------- MAIN START----------------------------*@
+    <div class="row title">
+        <div class="col-sm">
+            <h5>Tên Đại lý: <span>@Html.DisplayFor(model => model.UserName)</span></h5>
+        </div>
+    </div>
+    <div class="row input">
+        @Html.DisplayFor(model => model.RequireImg)
+    </div>
+    <div class="row title">
+        <div class="col-sm">
+            <h5>Kết luận: <span>@Html.DisplayFor(model => model.Conclution) </span></h5>
+        </div>
+    </div>
+    <div class="row input">
+        @Html.DisplayFor(model => model.ConclutionImg)
+    </div>
+    <div class="row input">
+        @Html.DisplayFor(model => model.ConclutionImg)
+    </div>
+    @*---------------------------- MAIN END----------------------------
+        ---------------------------- FOOTER START----------------------------*@
+<div class="row footer">
+    <div class="col-md-offset-2 col-md-12">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Xóa" class="btn btn-success" />
+                <button type="button" class="btn btn-primary">
+                    @Html.ActionLink("Trở lại", "Index", null, new { @class = "my-class" })
+                </button>
+            </div>
+        }
+    </div>
+    @*---------------------------- FOOTER END----------------------------*@
+</div>

@@ -1,0 +1,79 @@
+﻿@*@model List<Task_Report.tb_report>*@
+@model PagedList.IPagedList<Task_Report.tb_report>
+
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="~/Assets/Boostrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Assets/css/Index.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row header">
+            <div class="nametable">Danh sách lần báo cáo phân tích</div>
+            <div class="row title"> 
+                @using (Html.BeginForm("Index", "tb_report", FormMethod.Get, new {@class = "form-inline my-2 my-lg-0" }))
+                {
+                    <p >
+                        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new {@class = "form-control mr-sm-2" })
+                        <input type="submit" value="Tìm Kiếm" class="btn btn-success my-2 my-sm-0"/>
+                    </p>
+                }
+            </div>
+        </div>
+        <table class="table table-bordered">
+            <thead class="box color-table">
+                <tr>
+                    <th class="box1">Đại lý</th>
+                    <th class="box2">Thời gian</th>
+                    <th class="pull-center">
+                        <button type="button" class="btn btn-color btn-md">
+                            <div class="text-color">@Html.ActionLink("Thêm", "Create", "tb_report", null, new { @class = "my-class" })</div>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Time)</td>
+                        <td>
+                            <div class="btn-group pull-right" role="group" aria-label="Basic example">
+                                <div class="btn btn-link">@Html.ActionLink("Sửa", "Edit", new { id = item.id })</div>
+                                <div class="btn btn-link">@Html.ActionLink("Xóa", "Delete", new { id = item.id })</div>
+                                <div class="btn btn-link">@Html.ActionLink("Xem kết quả", "Details", new { id = item.id })</div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        
+        <div class="panel-footer">
+            <ul class="pagination ">
+                <div >
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    @Html.PagedListPager(Model, page => Url.Action("Index",
+                   new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                </div>
+            </ul>
+        </div>
+    </div>
+    <script src="~/Assets/Boostrap/js/bootstrap.js"></script>
+</body>
+</html>
