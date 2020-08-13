@@ -7,11 +7,11 @@
 
 @using (Html.BeginForm())
 {
-                @Html.AntiForgeryToken()
-                <link href="~/Assets/Boostrap/css/bootstrap.css" rel="stylesheet" />
-            
-                <link href="~/Assets/css/Input.css" rel="stylesheet" />
-            
+    @Html.AntiForgeryToken()
+    <link href="~/Assets/Boostrap/css/bootstrap.css" rel="stylesheet" />
+
+    <link href="~/Assets/css/Input.css" rel="stylesheet" />
+
 
     <div class="main">
         <div class="row title">
@@ -27,10 +27,14 @@
         <div class="row input">
             <div>
                 @*@Html.EditorFor(model => model.RequireImg, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.RequireImg, "", new { @class = "text-danger" })*@
-                @Html.EditorFor(model => model.RequireImg, new { htmlAttributes = new { @class = "form-control", @type = "file" } })
-                @Html.ValidationMessageFor(model => model.RequireImg, "", new { @class = "text-danger" })
-
+                    @Html.ValidationMessageFor(model => model.RequireImg, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.RequireImg, new { htmlAttributes = new { @class = "form-control", @type = "file" } })
+                    @Html.ValidationMessageFor(model => model.RequireImg, "", new { @class = "text-danger" })*@
+                Chọn hình ảnh <input type="text" name="picture" id="pictureRequire" class="form-control" />
+                <input type="file" id="fileuploadRequire" accept="image/*" name="fileuploadRequire" style="display:none;" />
+                <input type="button" id="btnuploadRequire" value="lấy ảnh" class="btn btn-success" />
+                <br />
+                <img id="pictureuploadRequite" width="300" />
             </div>
         </div>
         <div class="row title">
@@ -44,19 +48,22 @@
         </div>
         <div class="row input">
             <div>
-                @Html.EditorFor(model => model.ConclutionImg, new { htmlAttributes = new { @class = "form-control", @type = "file" } })
-                @Html.ValidationMessageFor(model => model.ConclutionImg, "", new { @class = "text-danger" })
+                Chọn hình ảnh <input type="text" name="picture" id="picture" class="form-control" />
+                <input type="file" id="fileupload" accept="image/*" name="fileupload" style="display:none;"/>
+                <input type="button" id="btnupload" value="lấy ảnh" class="btn btn-success" />
+                <br />
+                <img id="pictureupload" width="300" />
             </div>
         </div>
-        <div class="row input">
+        @*<div class="row input">
             <form>
                 @Html.EditorFor(model => model.ConclutionImg, new { htmlAttributes = new { @class = "form-control", @type = "file" } })
                 @Html.ValidationMessageFor(model => model.ConclutionImg, "", new { @class = "text-danger" })
             </form>
-        </div>
+        </div>*@
         <div class="row footer">
             <div class="col-md-offset-2 col-md-12">
-                <input type="submit" value="Thêm" class="btn btn-success" /> 
+                <input type="submit" value="Thêm" class="btn btn-success" />
                 <button type="button" class="btn btn-primary">
                     @Html.ActionLink("Trở lại", "Index", null, new { @class = "my-class" })
                 </button>
@@ -64,7 +71,62 @@
         </div>
     </div>
 }
-
+@section upload{
+    <script>
+        $(function () {
+            $('#btnuploadRequire').click(function () {
+                $('#fileuploadRequire').trigger('click');
+            });
+            $('#fileuploadRequire').change(function () {
+                if (window.FormData !== undefined) {
+                    var fileupload = $('#fileuploadRequire').get(0);
+                    var files = fileupload.files;
+                    var formData = new FormData();
+                    formData.append('file', files[0]);
+                    $.ajax(
+                        {
+                            type: 'POST',
+                            url: '/tb_report/processuploadRequireImg',
+                            contentType: false,
+                            processData: false,
+                            data: formData,
+                            success: function (urlImage) {
+                                $('#pictureuploadRequite').attr('src', urlImage);
+                                $('#pictureRequire').val(urlImage);
+                            }
+                        });
+                }
+            });
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#btnupload').click(function () {
+                $('#fileupload').trigger('click');
+            });
+            $('#fileupload').change(function () {
+                if (window.FormData !== undefined) {
+                    var fileupload = $('#fileupload').get(0);
+                    var files = fileupload.files;
+                    var formData = new FormData();
+                    formData.append('file', files[0]);
+                    $.ajax(
+                        {
+                            type: 'POST',
+                            url: '/tb_report/processuploadConclutionImg',
+                            contentType: false,
+                            processData: false,
+                            data: formData,
+                            success: function (urlImage) {
+                                $('#pictureupload').attr('src', urlImage);
+                                $('#picture').val(urlImage);
+                            }
+                        });
+                }
+            });
+        });
+    </script>
+}
 
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>

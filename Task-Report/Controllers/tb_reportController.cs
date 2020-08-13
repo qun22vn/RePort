@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Mvc;
 using PagedList;
@@ -17,33 +19,45 @@ namespace Task_Report.Controllers
         private Model1 db = new Model1();
 
         // GET: tb_report
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(db.tb_report.ToList());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+            var tb_report = from s in db.tb_report
+                            select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                tb_report = tb_report.Where(s => s.UserName.Contains(searchString)
+                                       || s.UserName.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    tb_report = tb_report.OrderByDescending(s => s.UserName);
+                    break;
+                default:
+                    tb_report = tb_report.OrderBy(s => s.Time);
+                    break;
+            }
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(tb_report.ToPagedList(pageNumber, pageSize));
+            //return View(db.tb_report.ToList());
         }
 
-        //public PartialViewResult GetPaging(int? page)
-        //{
-        //    int pageSize = 3;
-        //    int pageNumber = (page ?? 1);
-        //    return PartialView("_PartialViewCustomer", tb_report.TopagedList(pageNumber, pageSize));
-        //}
-        //[HttpPost]
-        //public ActionResult Index(HttpPostedFileBase postedFile)
-        //{
-        //    byte[] bytes;
-        //    using (BinaryReader br = new BinaryReader(postedFile.InputStream))
-        //    {
-        //        bytes = br.ReadBytes(postedFile.ContentLength);
-        //    }
-        //    tb_report tb_report = new tb_report();
-        //    tb_report.tb_report.Add(new tb_report
-        //    {
-        //        RequireImg = bytes
-        //    });
-        //    tb_report.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+
+
 
         // GET: tb_report/Details/5
         public ActionResult Details(long? id)
@@ -71,11 +85,12 @@ namespace Task_Report.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,UserName,AgentCode,Conclution,RequireImg,ConclutionImg,Time")] tb_report tb_report, HttpPostedFileBase file)
+        public ActionResult Create([Bind(Include = "id,UserName,AgentCode,Conclution,RequireImg,ConclutionImg,Time")] tb_report tb_report)
         {
+         
             if (ModelState.IsValid)
             {
-               
+
                 tb_report.Time = DateTime.Now;
                 db.tb_report.Add(tb_report);
                 db.SaveChanges();
@@ -84,6 +99,19 @@ namespace Task_Report.Controllers
 
             return View(tb_report);
         }
+
+        public string processuploadRequireImg(HttpPostedFileBase file)
+        {
+            file.SaveAs(Server.MapPath("~/RequireImg" + file.FileName));
+            return "/RequireImg" + file.FileName;
+        }
+
+        public string processuploadConclutionImg(HttpPostedFileBase file)
+        {
+            file.SaveAs(Server.MapPath("~/ConclutionImg" + file.FileName));
+            return "/ConclutionImg" + file.FileName;
+        }
+
 
         // GET: tb_report/Edit/5
         public ActionResult Edit(long? id)
@@ -109,6 +137,7 @@ namespace Task_Report.Controllers
         {
             if (ModelState.IsValid)
             {
+                tb_report.Time = DateTime.Now;
                 db.Entry(tb_report).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
